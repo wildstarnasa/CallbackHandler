@@ -1,6 +1,6 @@
 --[[ $Id: CallbackHandler-1.0.lua 14 2010-08-09 00:43:38Z mikk $ ]]
 -- Adapted to WildStar Packaging format by Sinaloit
-local MAJOR, MINOR = "Gemini:CallbackHandler-1.0", 1
+local MAJOR, MINOR = "Gemini:CallbackHandler-1.0", 2
 -- Get a reference to the package information if any
 local APkg = Apollo.GetPackage(MAJOR)
 -- If there was an older version loaded we need to see if this is newer
@@ -17,6 +17,9 @@ local tconcat = table.concat
 local assert, error, loadstring = assert, error, loadstring
 local setmetatable, rawset, rawget = setmetatable, rawset, rawget
 local next, select, pairs, type, tostring = next, select, pairs, type, tostring
+
+local tLibError = Apollo.GetPackage("Gemini:LibError-1.0")
+local fnErrorHandler = tLibError and tLibError.tPackage.Error or Print
 
 local xpcall = xpcall
 
@@ -46,7 +49,7 @@ local function CreateDispatcher(argCount)
 	local ARGS, OLD_ARGS = {}, {}
 	for i = 1, argCount do ARGS[i], OLD_ARGS[i] = "arg"..i, "old_arg"..i end
 	code = code:gsub("OLD_ARGS", tconcat(OLD_ARGS, ", ")):gsub("ARGS", tconcat(ARGS, ", "))
-	return assert(loadstring(code, "safecall Dispatcher["..argCount.."]"))(next, xpcall, error)
+	return assert(loadstring(code, "safecall Dispatcher["..argCount.."]"))(next, xpcall, fnErrorHandler)
 end
 
 local Dispatchers = setmetatable({}, {__index=function(self, argCount)
