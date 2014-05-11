@@ -1,6 +1,6 @@
 --[[ $Id: CallbackHandler-1.0.lua 14 2010-08-09 00:43:38Z mikk $ ]]
 -- Adapted to WildStar Packaging format by Sinaloit
-local MAJOR, MINOR = "Gemini:CallbackHandler-1.0", 2
+local MAJOR, MINOR = "Gemini:CallbackHandler-1.0", 3
 -- Get a reference to the package information if any
 local APkg = Apollo.GetPackage(MAJOR)
 -- If there was an older version loaded we need to see if this is newer
@@ -19,7 +19,7 @@ local setmetatable, rawset, rawget = setmetatable, rawset, rawget
 local next, select, pairs, type, tostring = next, select, pairs, type, tostring
 
 local tLibError = Apollo.GetPackage("Gemini:LibError-1.0")
-local fnErrorHandler = tLibError and tLibError.tPackage.Error or Print
+local fnErrorHandler = tLibError and tLibError.tPackage and tLibError.tPackage.Error or Print
 
 local xpcall = xpcall
 
